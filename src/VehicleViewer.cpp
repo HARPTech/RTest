@@ -15,7 +15,7 @@ VehicleViewer::VehicleViewer(QWidget* parent)
   ui->setupUi(this);
 
   // Initialize the rover model.
-  m_roverModel = new RoverModel(this);
+  m_roverModel = new RoverModel();
 
   qmlRegisterUncreatableType<RoverModel>(
     "RTest", 1, 0, "RoverModel", "Only given from UserManager.");
@@ -24,7 +24,8 @@ VehicleViewer::VehicleViewer(QWidget* parent)
   QQuickWidget* view = new QQuickWidget(this);
 
   // Inject the rover model.
-  view->rootContext()->setContextProperty("RoverModel", QVariant::fromValue(m_roverModel));
+  view->rootContext()->setContextProperty("RoverModel",
+                                          QVariant::fromValue(m_roverModel));
 
   // Load the QML.
   view->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -53,66 +54,50 @@ VehicleViewer::on_steeringSlider_sliderMoved(int steering)
 void
 VehicleViewer::on_speedFLSpinner_valueChanged(int speed)
 {
-  m_wheelSpeed[FL] = speed;
-  m_roverModel->dataChanged(m_roverModel->index(FL, 0),
-                            m_roverModel->index(FL, 0),
-                            { RoverModel::WheelSpeedRole });
+  m_roverModel->setData(
+    m_roverModel->index(FL, 0), speed, RoverModel::WheelSpeedRole);
 }
 void
 VehicleViewer::on_speedFRSpinner_valueChanged(int speed)
 {
-  m_wheelSpeed[FR] = speed;
-  m_roverModel->dataChanged(m_roverModel->index(FR, 0),
-                            m_roverModel->index(FR, 0),
-                            { RoverModel::WheelSpeedRole });
+  m_roverModel->setData(
+    m_roverModel->index(FR, 0), speed, RoverModel::WheelSpeedRole);
 }
 void
 VehicleViewer::on_speedRLSpinner_valueChanged(int speed)
 {
-  m_wheelSpeed[RL] = speed;
-  m_roverModel->dataChanged(m_roverModel->index(RL, 0),
-                            m_roverModel->index(RL, 0),
-                            { RoverModel::WheelSpeedRole });
+  m_roverModel->setData(
+    m_roverModel->index(RL, 0), speed, RoverModel::WheelSpeedRole);
 }
 void
 VehicleViewer::on_speedRRSpinner_valueChanged(int speed)
 {
-  m_wheelSpeed[RR] = speed;
-  m_roverModel->dataChanged(m_roverModel->index(RR, 0),
-                            m_roverModel->index(RR, 0),
-                            { RoverModel::WheelSpeedRole });
+  m_roverModel->setData(
+    m_roverModel->index(RR, 0), speed, RoverModel::WheelSpeedRole);
 }
 void
 VehicleViewer::on_steeringFLSpinner_valueChanged(int steering)
 {
-  m_wheelSteering[FL] = steering;
-  m_roverModel->dataChanged(m_roverModel->index(FL, 0),
-                            m_roverModel->index(FL, 0),
-                            { RoverModel::WheelSteeringRole });
+  m_roverModel->setData(
+    m_roverModel->index(FL, 0), steering, RoverModel::WheelSteeringRole);
 }
 void
 VehicleViewer::on_steeringFRSpinner_valueChanged(int steering)
 {
-  m_wheelSteering[FR] = steering;
-  m_roverModel->dataChanged(m_roverModel->index(FR, 0),
-                            m_roverModel->index(FR, 0),
-                            { RoverModel::WheelSteeringRole });
+  m_roverModel->setData(
+    m_roverModel->index(FR, 0), steering, RoverModel::WheelSteeringRole);
 }
 void
 VehicleViewer::on_steeringRLSpinner_valueChanged(int steering)
 {
-  m_wheelSteering[RL] = steering;
-  m_roverModel->dataChanged(m_roverModel->index(RL, 0),
-                            m_roverModel->index(RL, 0),
-                            { RoverModel::WheelSteeringRole });
+  m_roverModel->setData(
+    m_roverModel->index(RL, 0), steering, RoverModel::WheelSteeringRole);
 }
 void
 VehicleViewer::on_steeringRRSpinner_valueChanged(int steering)
 {
-  m_wheelSteering[RR] = steering;
-  m_roverModel->dataChanged(m_roverModel->index(RR, 0),
-                            m_roverModel->index(RR, 0),
-                            { RoverModel::WheelSteeringRole });
+  m_roverModel->setData(
+    m_roverModel->index(RR, 0), steering, RoverModel::WheelSteeringRole);
 }
 }
 }

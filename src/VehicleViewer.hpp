@@ -31,17 +31,11 @@ class VehicleViewer : public QWidget
   explicit VehicleViewer(QWidget* parent = 0);
   virtual ~VehicleViewer();
 
-  int16_t getWheelSteering(Wheel wheel) const { return m_wheelSteering[wheel]; }
-  int16_t getWheelSpeed(Wheel wheel) const { return m_wheelSpeed[wheel]; }
-
   private:
   Ui::VehicleViewer* ui;
 
   int16_t m_steering = 0;
   int16_t m_speed = 0;
-
-  int16_t m_wheelSteering[4] = { 128, 128, 128, 128 };
-  int16_t m_wheelSpeed[4] = { 0, 0, 0, 0 };
 
   RoverModel* m_roverModel;
 
@@ -76,13 +70,10 @@ class RoverModel : public QAbstractListModel
     WheelSteeringRole
   };
 
-  RoverModel(VehicleViewer* viewer)
-    : m_viewer(viewer)
-  {
-  }
+  RoverModel() {}
   virtual ~RoverModel() {}
 
-  QHash<int, QByteArray> roleNames() const override
+  virtual QHash<int, QByteArray> roleNames() const override
   {
     QHash<int, QByteArray> roles;
     roles[WheelSpeedRole] = "speed";
@@ -90,14 +81,14 @@ class RoverModel : public QAbstractListModel
     return roles;
   }
 
-  int rowCount(const QModelIndex& parent = QModelIndex()) const override
+  virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override
   {
     Q_UNUSED(parent);
     return 4;
   }
 
-  QVariant data(const QModelIndex& index,
-                int role = Qt::DisplayRole) const override
+  virtual QVariant data(const QModelIndex& index,
+                        int role = Qt::DisplayRole) const override
   {
     if(index.row() < 0 || index.row() > 4)
       return QVariant();
@@ -105,16 +96,39 @@ class RoverModel : public QAbstractListModel
     VehicleViewer::Wheel wheel = static_cast<VehicleViewer::Wheel>(index.row());
     switch(role) {
       case WheelSpeedRole:
-        return m_viewer->getWheelSpeed(wheel);
+        return m_wheelSpeed[wheel];
       case WheelSteeringRole:
-        return m_viewer->getWheelSteering(wheel);
+        return m_wheelSteering[wheel];
       default:
         return QVariant();
     }
   }
+  virtual bool setData(const QModelIndex& index,
+                       const QVariant& val,
+                       int role = Qt::EditRole) override
+  {
+    if(index.row() < 0 || index.row() > 4) {
+      return false;
+    }
+
+    VehicleViewer::Wheel wheel = static_cast<VehicleViewer::Wheel>(index.row());
+    switch(role) {
+      case WheelSpeedRole:
+        m_wheelSpeed[wheel] = val.toInt();
+        break;
+      case WheelSteeringRole:
+        m_wheelSteering[wheel] = val.toInt();
+        break;
+      default:
+        return false;
+    }
+    dataChanged(index, index, { role });
+    return true;
+  }
 
   private:
-  VehicleViewer* m_viewer;
+  int16_t m_wheelSteering[4] = { 128, 128, 128, 128 };
+  int16_t m_wheelSpeed[4] = { 0, 0, 0, 0 };
 };
 }
 }
