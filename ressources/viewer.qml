@@ -30,8 +30,8 @@ Item {
 	}
 
 	GridView {
-	    anchors.horizontalCenter: roverBody.horizontalCenter
-	    anchors.verticalCenter: roverBody.verticalCenter
+	    x: roverBody.x - 2.5
+	    y: roverBody.y - 10
 
 	    width: roverBody.width * 2
 	    height: roverBody.height * 2
@@ -41,7 +41,7 @@ Item {
 
 	    model: RoverModel
 	    delegate: Rectangle {
-		id: delegate
+		id: wheelDelegate
 		width: 5
 		height: 20
  		color: "black"
