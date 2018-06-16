@@ -19,6 +19,10 @@ class VehicleViewer : public QWidget
 
   private:
   Ui::VehicleViewer* ui;
+
+private Q_SLOTS:
+  void on_speedSlider_sliderMoved(int speed);
+  void on_steeringSlider_sliderMoved(int steering);
 };
 }
 }
