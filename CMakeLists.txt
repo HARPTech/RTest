@@ -22,7 +22,10 @@ add_subdirectory(src)
 
 add_subdirectory(RBase)
 
-add_library(rtest SHARED ${SRCS})
+qt5_add_resources(RTEST_RSCS_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/ressources/rtest.qrc)
+
+add_library(rtest SHARED ${SRCS} ${RTEST_RSCS_SRCS})
 target_link_libraries(rtest Qt5::Widgets Qt5::Quick Qt5::QuickWidgets Qt5::Qml Qt5::Network)
 target_link_libraries(rtest rcomm)
 target_link_libraries(rtest rregistry)
@@ -30,4 +33,3 @@ target_link_libraries(rtest rsupport)
 
 add_executable(RTest ${EXECUTABLE_SRCS} ${FORMS_HPP})
 target_link_libraries(RTest rtest)
-
