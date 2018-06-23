@@ -22,10 +22,7 @@ RegulationKernelWrapper::RegulationKernelWrapper(QObject* parent)
 RegulationKernelWrapper::~RegulationKernelWrapper()
 {
   m_registry->removeReceiver(this);
-  if(m_process) {
-    m_process->kill();
-    m_process->waitForFinished();
-  }
+  stop();
 }
 
 void
@@ -68,6 +65,7 @@ RegulationKernelWrapper::stop()
 {
   if(m_process) {
     m_process->kill();
+    m_process->waitForFinished();
     m_process.reset();
   }
 }

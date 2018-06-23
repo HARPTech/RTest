@@ -76,7 +76,7 @@ VehicleViewer::VehicleViewer(QWidget* parent)
                 ui->wrapperButton->setText(tr("Run Wrapped Regulation Kernel"));
                 break;
               case QProcess::Starting:
-                ui->wrapperButton->setCheckable(false);
+                ui->wrapperButton->setCheckable(true);
                 break;
               case QProcess::Running:
                 ui->wrapperButton->setCheckable(true);
@@ -89,6 +89,7 @@ VehicleViewer::VehicleViewer(QWidget* parent)
 
 VehicleViewer::~VehicleViewer()
 {
+  disconnect(&m_wrapper, &RegulationKernelWrapper::state_changed, 0, 0);
   delete m_roverModel;
   delete ui;
 }
