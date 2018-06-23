@@ -6,6 +6,8 @@
 #include <QWidget>
 #include <memory>
 
+#include "RegulationKernelWrapper.hpp"
+
 namespace Ui {
 class VehicleViewer;
 }
@@ -16,6 +18,8 @@ class RoverModel;
 
 class VehicleViewer : public QWidget
 {
+  Q_OBJECT
+
   public:
   enum Wheel
   {
@@ -24,8 +28,6 @@ class VehicleViewer : public QWidget
     RL,
     RR
   };
-
-  Q_OBJECT
 
   public:
   explicit VehicleViewer(QWidget* parent = 0);
@@ -38,12 +40,17 @@ class VehicleViewer : public QWidget
   int16_t m_speed = 0;
 
   RoverModel* m_roverModel;
+  RegulationKernelWrapper m_wrapper;
 
   private Q_SLOTS:
   // Sliders
   // -------------------------------------------------
   void on_speedSlider_sliderMoved(int speed);
   void on_steeringSlider_sliderMoved(int steering);
+
+  // Regulation Kernel Wrapper
+  // -------------------------------------------------
+  void on_wrapperButton_released();
 
   // Speed
   // -------------------------------------------------

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>831</width>
-    <height>539</height>
+    <height>616</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -215,26 +215,73 @@
       </widget>
      </item>
      <item>
-      <widget class="QPlainTextEdit" name="smt2Input">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QToolBox" name="toolBox">
+       <property name="currentIndex">
+        <number>1</number>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="smt2InputButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Parse SMT2 Values</string>
-       </property>
+       <widget class="QWidget" name="smt2Parser">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>382</width>
+          <height>157</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>SMT2 Parser</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QPlainTextEdit" name="smt2Input">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="smt2InputButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Parse SMT2 Values</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="regulationKernelWrapper">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>382</width>
+          <height>157</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Regulation Kernel Wrapper</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QPlainTextEdit" name="wrapperCommand"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="wrapperButton">
+           <property name="text">
+            <string>Run Wrapped Regulation Kernel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
