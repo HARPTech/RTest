@@ -24,4 +24,4 @@ right corner of the application and hit "Run Wrapped Regulation Kernel".
 
 An example for this would be the following statement:
 
-    python3 /home/maximaximal/Dokumente/Bachelor/codebase-sequencer/example/kernel_setup.py
+    python3 $HOME/Downloads/RVerify/example-rk/kernel_setup.py
