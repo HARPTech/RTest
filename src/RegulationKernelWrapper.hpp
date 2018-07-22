@@ -24,13 +24,18 @@ class RegulationKernelWrapper
 
   bool isRunning();
 
+  virtual void onUpdate(rregistry::Type type, uint32_t property);
+
+  void setAcceptProperty(bool accept)
+  {
+    m_consoleAdapter->setAcceptProperty(accept);
+  }
+
   private:
   std::shared_ptr<rregistry::Registry> m_registry;
   std::shared_ptr<rsupport::ConsoleAdapter> m_consoleAdapter;
 
   std::unique_ptr<QProcess> m_process;
-
-  virtual void onUpdate(rregistry::Type type, uint32_t property);
 
   Q_SIGNALS:
   void servo_fl_changed(int);
@@ -42,6 +47,8 @@ class RegulationKernelWrapper
   void motor_fr_changed(int);
   void motor_rl_changed(int);
   void motor_rr_changed(int);
+
+  void burst_received();
 
   void state_changed(QProcess::ProcessState state);
 

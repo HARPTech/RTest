@@ -39,6 +39,12 @@ RegulationKernelWrapper::start(QString command)
   // Setup environment for console embedded mode of RSupport.
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   env.insert("RSUPPORT_CONSOLE_ONLY", "ON");
+  QString pythonPath = env.value("PYTHONPATH") +
+                       ":./RBase/swig/python/"
+                       ":/usr/local/share/RTest/python3/" +
+                       ":/usr/local/share/RTest/python3/" +
+                       ":/usr/share/RTest/python3";
+  env.insert("PYTHONPATH", pythonPath);
   process->setProcessEnvironment(env);
   process->setReadChannel(QProcess::StandardOutput);
 
@@ -119,6 +125,14 @@ RegulationKernelWrapper::onUpdate(rregistry::Type type, uint32_t property)
           break;
       }
       break;
+    case Type::Bool:
+      switch(property) {
+        case static_cast<uint32_t>(Bool::BRST_RBREAKOUT_MOVEMENT):
+          burst_received();
+          break;
+        default:
+          break;
+      }
     default:
       break;
   }

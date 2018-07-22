@@ -5,6 +5,7 @@
 #include <QQmlContext>
 
 #include <QtQuickWidgets/QQuickWidget>
+#include <thread>
 
 namespace lrt {
 namespace rtest {
@@ -67,6 +68,9 @@ VehicleViewer::VehicleViewer(QWidget* parent)
           &RegulationKernelWrapper::servo_rr_changed,
           ui->steeringRRSpinner,
           &QSpinBox::setValue);
+  connect(&m_wrapper, &RegulationKernelWrapper::burst_received, [&]() {
+    issueNextBenchmarkStep();
+  });
   connect(&m_wrapper,
           &RegulationKernelWrapper::state_changed,
           [&](QProcess::ProcessState state) {
@@ -95,6 +99,65 @@ VehicleViewer::~VehicleViewer()
 }
 
 void
+VehicleViewer::issueNextBenchmarkStep()
+{
+  if(m_benchmarkRunning) {
+    m_wrapper.setAcceptProperty(true);
+    updateBenchmarkStats();
+    if(m_benchmarkSteering < 32767 - 500) {
+      m_benchmarkSteering += 500;
+      ui->steeringSlider->setValue(m_benchmarkSteering);
+      on_steeringSlider_sliderMoved(m_benchmarkSteering);
+    } else {
+      m_benchmarkSteering = -32768;
+      if(m_benchmarkSpeed < 32767 - 500) {
+        m_benchmarkSpeed += 500;
+        ui->speedSlider->setValue(m_benchmarkSpeed);
+        on_speedSlider_sliderMoved(m_benchmarkSpeed);
+      } else {
+        finishBenchmark();
+      }
+    }
+  }
+}
+void
+VehicleViewer::updateBenchmarkStats()
+{
+  // Update time taken and percentage completed.
+  int64_t done = (32769 + (int64_t)m_benchmarkSpeed) *
+                   (int64_t)std::numeric_limits<uint16_t>::max() +
+                 (int64_t)m_benchmarkSteering;
+  int64_t todo = (int64_t)std::numeric_limits<uint16_t>::max() *
+                 (int64_t)std::numeric_limits<uint16_t>::max();
+  float percentage = (float)done / (float)todo;
+  ui->benchmarkProgress->setValue(percentage * 100);
+  QString statusText = tr("Trying out every combination of inputs with one "
+                          "step being 500 units.\n") +
+                       tr("Currently, ") + QString::number(done) + tr(" of ") +
+                       QString::number(todo);
+  ui->benchmarkStatus->setText(statusText);
+}
+void
+VehicleViewer::startBenchmark()
+{
+  m_benchmarkSteering = -32768;
+  m_benchmarkSpeed = -32768;
+  ui->steeringSlider->setValue(m_benchmarkSteering);
+  on_steeringSlider_sliderMoved(m_benchmarkSteering);
+  m_benchmarkRunning = true;
+  ui->speedSlider->setValue(m_benchmarkSpeed);
+  on_speedSlider_sliderMoved(m_benchmarkSpeed);
+  m_benchmarkStart = std::chrono::system_clock::now();
+}
+void
+VehicleViewer::finishBenchmark()
+{
+  m_benchmarkEnd = std::chrono::system_clock::now();
+  m_benchmarkRunning = false;
+  updateBenchmarkStats();
+}
+
+void
 VehicleViewer::on_speedSlider_sliderMoved(int speed)
 {
   m_speed = speed;
@@ -114,6 +177,20 @@ VehicleViewer::on_wrapperButton_released()
     m_wrapper.stop();
   } else {
     m_wrapper.start(ui->wrapperCommand->document()->toPlainText());
+  }
+}
+void
+VehicleViewer::on_assignmentParseButton_released()
+{}
+void
+VehicleViewer::on_benchmarkStartButton_released()
+{
+  if(m_benchmarkRunning) {
+    finishBenchmark();
+    ui->benchmarkStartButton->setText(tr("Start Benchmark"));
+  } else {
+    startBenchmark();
+    ui->benchmarkStartButton->setText(tr("Stop Benchmark"));
   }
 }
 

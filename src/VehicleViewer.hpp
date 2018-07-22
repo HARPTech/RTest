@@ -34,13 +34,26 @@ class VehicleViewer : public QWidget
   virtual ~VehicleViewer();
 
   private:
-  Ui::VehicleViewer* ui;
+  ::Ui::VehicleViewer* ui;
 
   int16_t m_steering = 0;
   int16_t m_speed = 0;
 
   RoverModel* m_roverModel;
   RegulationKernelWrapper m_wrapper;
+
+  int16_t m_benchmarkSteering = -32768;
+  int16_t m_benchmarkSpeed = -32768;
+  bool m_benchmarkRunning = false;
+
+  void issueNextBenchmarkStep();
+  void finishBenchmark();
+  void startBenchmark();
+  void updateBenchmarkStats();
+  std::chrono::system_clock::time_point m_benchmarkStart =
+    std::chrono::system_clock::now();
+  std::chrono::system_clock::time_point m_benchmarkEnd =
+    std::chrono::system_clock::now();
 
   private Q_SLOTS:
   // Sliders
@@ -51,6 +64,14 @@ class VehicleViewer : public QWidget
   // Regulation Kernel Wrapper
   // -------------------------------------------------
   void on_wrapperButton_released();
+
+  // Assignment Parser
+  // -------------------------------------------------
+  void on_assignmentParseButton_released();
+
+  // Benchmark
+  // -------------------------------------------------
+  void on_benchmarkStartButton_released();
 
   // Speed
   // -------------------------------------------------
