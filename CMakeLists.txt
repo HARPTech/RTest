@@ -81,6 +81,6 @@ set(CPACK_RESSOURCE_FILE_README ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
 set(CPACK_OUTPUT_FILE_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/packages)
 set(CPACK_PACKAGE_CONTACT "Max Heisinger <mail@maximaximal.com>")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, python3-numpy, libpython3.4, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-layouts, qml-module-qtquick2, libqt5widgets5, libqt5gui5, libqt5quick5, libqt5qml5, libqt5quickwidgets5, swig")
-set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "arm64")
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 
 include(CPack)
