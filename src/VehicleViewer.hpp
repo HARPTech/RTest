@@ -55,6 +55,9 @@ class VehicleViewer : public QWidget
   std::chrono::system_clock::time_point m_benchmarkEnd =
     std::chrono::system_clock::now();
 
+  void readAssignmentLine(QString line);
+  void parseAssignmentToken(QString key, QString value);
+
   private Q_SLOTS:
   // Sliders
   // -------------------------------------------------

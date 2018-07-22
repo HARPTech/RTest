@@ -181,7 +181,52 @@ VehicleViewer::on_wrapperButton_released()
 }
 void
 VehicleViewer::on_assignmentParseButton_released()
-{}
+{
+  // Parse the given assignments line by line.
+  QString text = ui->assignmentInput->toPlainText();
+  QTextStream stream(&text, QIODevice::ReadOnly);
+  while(!stream.atEnd()) {
+    QString line = stream.readLine();
+    readAssignmentLine(line);
+  }
+}
+void
+VehicleViewer::readAssignmentLine(QString line)
+{
+  line.remove(',');
+  if(line.contains('=')) {
+    QStringList tokens = line.split('=');
+    parseAssignmentToken(tokens.at(0).trimmed(), tokens.at(1).trimmed());
+  }
+}
+void
+VehicleViewer::parseAssignmentToken(QString key, QString value)
+{
+  int32_t val = value.toInt();
+  if(key == "_motor_fl_") {
+    ui->speedFLSpinner->setValue(val);
+  }
+  if(key == "_motor_fr_") {
+    ui->speedFRSpinner->setValue(val);
+  } else if(key == "_motor_rl_") {
+    ui->speedRLSpinner->setValue(val);
+  } else if(key == "_motor_rr_") {
+    ui->speedRRSpinner->setValue(val);
+  } else if(key == "_servo_fl_") {
+    ui->steeringFLSpinner->setValue(val);
+  } else if(key == "_servo_fr_") {
+    ui->steeringFRSpinner->setValue(val);
+  } else if(key == "_servo_rl_") {
+    ui->steeringRLSpinner->setValue(val);
+  } else if(key == "_servo_rr_") {
+    ui->steeringRRSpinner->setValue(val);
+  } else if(key == "_steer_direction_") {
+    ui->steeringSlider->setValue(val);
+  } else if(key == "_forward_velocity_") {
+    ui->speedSlider->setValue(val);
+  }
+}
+
 void
 VehicleViewer::on_benchmarkStartButton_released()
 {
