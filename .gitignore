@@ -180,3 +180,4 @@ pyvenv.cfg
 pip-selfcheck.json
 
 build/
+packages/
