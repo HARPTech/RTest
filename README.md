@@ -1,6 +1,8 @@
 RTest
 =====
 
+![RTest-Screenshot](./RTest-Screenshot.png)
+
 Requirements
 ------------
 
