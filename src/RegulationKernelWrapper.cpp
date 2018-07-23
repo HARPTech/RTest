@@ -1,5 +1,7 @@
 #include "RegulationKernelWrapper.hpp"
 #include <QDebug>
+#include <QtGlobal>
+#include <memory>
 
 namespace lrt {
 namespace rtest {
@@ -39,13 +41,19 @@ RegulationKernelWrapper::start(QString command)
   // Setup environment for console embedded mode of RSupport.
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   env.insert("RSUPPORT_CONSOLE_ONLY", "ON");
-  QString pythonPath = env.value("PYTHONPATH") +
-                       ":./RBase/swig/python/"
+  QString pythonPath = QString("./RBase/swig/python/") +
                        ":/usr/local/share/RTest/python3/" +
                        ":/usr/local/share/RTest/python3/" +
-                       ":/usr/share/RTest/python3";
+                       ":/usr/share/RTest/python3/:" + env.value("PYTHONPATH");
   env.insert("PYTHONPATH", pythonPath);
+
+  QString ldLibraryPath = QString("./RBase/RRegistry/") + ":./RBase/RSupport/" +
+                          ":/usr/local/share/RTest/" +
+                          ":/usr/share/RTest/:" + env.value("LD_LIBRARY_PATH");
+  env.insert("LD_LIBRARY_PATH", ldLibraryPath);
+
   process->setProcessEnvironment(env);
+  process->setProcessChannelMode(QProcess::MergedChannels);
   process->setReadChannel(QProcess::StandardOutput);
 
   // Setup callbacks.
@@ -54,13 +62,57 @@ RegulationKernelWrapper::start(QString command)
       // As soon as a line can be read, the line has to be parsed in the
       // ConsoleAdapter.
       QString line = m_process->readLine();
+      if(line.at(0) != '!') {
+        // This is not a base64 encoded message and can be printed to the normal
+        // console!
+        qDebug() << "Regulation Kernel Output: " << line.trimmed();
+      }
       m_consoleAdapter->parseLine(line.toStdString());
     }
   });
 
+  connect(
+    process.get(), &QProcess::stateChanged, [&](QProcess::ProcessState state) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 6, 0)
+      if(state == QProcess::NotRunning) {
+        QProcess::ExitStatus exitStatus = m_process->exitStatus();
+        if(exitStatus == QProcess::NormalExit) {
+          qDebug() << "  Regulation Kernel finished!";
+        } else {
+          qWarning() << "  Regulation Kernel finished with exit code: "
+                     << QString::number(m_process->exitCode());
+          QProcess::ProcessError errorCode = m_process->error();
+          if(errorCode != QProcess::UnknownError) {
+            qWarning() << "  Encountered Error in Regulation Kernel Process: "
+                       << errorCode;
+          }
+        }
+      }
+#endif
+      state_changed(state);
+    });
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+  connect(
+    process.get(), &QProcess::errorOccurred, [&](QProcess::ProcessError error) {
+      qWarning() << "  Encountered Error in Regulation Kernel Process: "
+                 << error;
+    });
+
   connect(process.get(),
-          &QProcess::stateChanged,
-          [&](QProcess::ProcessState state) { state_changed(state); });
+          QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+          [&](int exitCode, QProcess::ExitStatus status) {
+            if(status == QProcess::NormalExit) {
+              qDebug() << "  Regulation Kernel finished!";
+            } else {
+              qWarning() << "  Regulation Kernel finished with exit code: "
+                         << QString::number(exitCode);
+            }
+          });
+#endif
+  connect(process.get(), &QProcess::started, [&]() {
+    qDebug() << "  Regulation Kernel Process started!";
+  });
 
   process->start(command);
   m_process = std::move(process);

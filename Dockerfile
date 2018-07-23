@@ -4,8 +4,8 @@ ENV DEFAULT_DOCKCROSS_IMAGE rtest-amd64
 
 RUN apt-get install -yq libboost-serialization-dev qtdeclarative5-dev qt5-default libsqlite3-dev swig2.0
 
-# Install Python Libraries
-RUN apt-get install -yq libpython3-dev python3-numpy
+# Install Standard Python Dev Stuff
+RUN apt-get install -yq libpython3-dev python3-numpy python3 libpython3.4
 
 ENV LD_LIBRARY_PATH /opt/swig/usr/lib
 

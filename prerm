@@ -1,0 +1,6 @@
+#! /usr/bin/env bash
+
+# Remove the created symlink.
+if [ -f /usr/share/RTest/libpython3.4m.so.1.0 ]; then
+    rm /usr/share/RTest/libpython3.4m.so.1.0
+fi

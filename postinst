@@ -1,0 +1,23 @@
+#! /usr/bin/env bash
+
+# Link python into the expected name. This works for simple python
+# modules, to provide compatability between debian jessie and newer systems.
+
+function install_python_lib {
+    if [ -f /usr/share/RTest/libpython3.4m.so.1.0 ]; then
+        rm /usr/share/RTest/libpython3.4m.so.1.0
+    fi
+
+    if [ -f /usr/lib/libpython3.so ]; then
+        ln -s /usr/lib/libpython3.so /usr/share/RTest/libpython3.4m.so.1.0
+	return
+    fi
+
+    if [ -f /usr/lib/x86_64-linux-gnu/libpython3.6m.so ]; then
+        ln -s /usr/lib/x86_64-linux-gnu/libpython3.6m.so /usr/share/RTest/libpython3.4m.so.1.0
+	return
+    fi
+    echo "WARNING: Did not find libpythonXX.so to link!";
+}
+
+install_python_lib
