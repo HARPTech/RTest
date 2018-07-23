@@ -6,7 +6,7 @@ RTest
 Installation
 ------------
 
-For Debian-based systems, use the provided dep from
+For Debian-based systems, use the provided deb from
 [the latest release](https://github.com/HARPTech/RTest/releases/latest).
 
 Other systems either need to unpack the .deb or compile their own version.
