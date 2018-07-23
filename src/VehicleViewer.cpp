@@ -3,7 +3,7 @@
 #include <QDebug>
 
 #include <QQmlContext>
-
+#include <QtQml>
 #include <QtQuickWidgets/QQuickWidget>
 #include <thread>
 
@@ -147,12 +147,10 @@ VehicleViewer::startBenchmark()
   m_benchmarkRunning = true;
   ui->speedSlider->setValue(m_benchmarkSpeed);
   on_speedSlider_sliderMoved(m_benchmarkSpeed);
-  m_benchmarkStart = std::chrono::system_clock::now();
 }
 void
 VehicleViewer::finishBenchmark()
 {
-  m_benchmarkEnd = std::chrono::system_clock::now();
   m_benchmarkRunning = false;
   updateBenchmarkStats();
 }

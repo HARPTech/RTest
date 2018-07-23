@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.4)
 project(RTest
-    VERSION 0.5.1)
+    VERSION 0.5.2)
 
 set(BUILD_NUMBER "0" CACHE STRING "Build-Number")
 

@@ -181,3 +181,5 @@ pip-selfcheck.json
 
 build/
 packages/
+buildLinuxAmd64/
+rtest-amd64

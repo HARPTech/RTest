@@ -50,10 +50,6 @@ class VehicleViewer : public QWidget
   void finishBenchmark();
   void startBenchmark();
   void updateBenchmarkStats();
-  std::chrono::system_clock::time_point m_benchmarkStart =
-    std::chrono::system_clock::now();
-  std::chrono::system_clock::time_point m_benchmarkEnd =
-    std::chrono::system_clock::now();
 
   void readAssignmentLine(QString line);
   void parseAssignmentToken(QString key, QString value);
