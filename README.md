@@ -3,19 +3,13 @@ RTest
 
 ![RTest-Screenshot](./RTest-Screenshot.png)
 
-Requirements
+Installation
 ------------
 
-Boost Serialization
-QtQuick
+For Debian-based systems, use the provided dep from
+[the latest release](https://github.com/HARPTech/RTest/releases/latest).
 
-Requirements (Ubuntu)
----------------------
-
-  - libboost-all-dev
-  - swig
-  - python3-numpy-dev
-  - qtdeclarative5-*
+Other systems either need to unpack the .deb or compile their own version.
 
 Example of Usage with Regulation Kernel
 ---------------------------------------
