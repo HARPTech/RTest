@@ -12,9 +12,14 @@ function install_python_lib {
         ln -s /usr/lib/libpython3.so /usr/share/RTest/libpython3.4m.so.1.0
 	return
     fi
-
+    # Linux Mint 19
     if [ -f /usr/lib/x86_64-linux-gnu/libpython3.6m.so ]; then
         ln -s /usr/lib/x86_64-linux-gnu/libpython3.6m.so /usr/share/RTest/libpython3.4m.so.1.0
+	return
+    fi
+    # Ubuntu 16.04 And Linux Mint 18.3
+    if [ -f /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1 ]; then
+        ln -s /usr/lib/x86_64-linux-gnu/libpython3.5m.so.1 /usr/share/RTest/libpython3.4m.so.1.0
 	return
     fi
     echo "WARNING: Did not find libpythonXX.so to link!";
