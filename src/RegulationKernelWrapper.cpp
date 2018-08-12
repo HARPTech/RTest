@@ -43,7 +43,6 @@ RegulationKernelWrapper::start(QString command)
   env.insert("RSUPPORT_CONSOLE_ONLY", "ON");
   QString pythonPath = QString("./RBase/swig/python/") +
                        ":/usr/local/share/RTest/python3/" +
-                       ":/usr/local/share/RTest/python3/" +
                        ":/usr/share/RTest/python3/:" + env.value("PYTHONPATH");
   env.insert("PYTHONPATH", pythonPath);
 
