@@ -183,3 +183,4 @@ build/
 packages/
 buildLinuxAmd64/
 rtest-amd64
+/CMakeLists.txt.user

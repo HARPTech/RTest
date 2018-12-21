@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1261</width>
-    <height>885</height>
+    <width>1669</width>
+    <height>1126</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -218,17 +218,17 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolBox" name="toolBox">
+      <widget class="QToolBox" name="tools">
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="assignmentParser">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>597</width>
-          <height>215</height>
+          <width>801</width>
+          <height>206</height>
          </rect>
         </property>
         <attribute name="label">
@@ -265,8 +265,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>597</width>
-          <height>215</height>
+          <width>801</width>
+          <height>206</height>
          </rect>
         </property>
         <attribute name="label">
@@ -286,6 +286,14 @@
         </layout>
        </widget>
        <widget class="QWidget" name="benchmarkPage">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>801</width>
+          <height>206</height>
+         </rect>
+        </property>
         <attribute name="label">
          <string>Regulation Kernel Auto-Test</string>
         </attribute>
@@ -308,6 +316,28 @@
           <widget class="QLabel" name="benchmarkStatus">
            <property name="text">
             <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="rverifyStatus">
+        <attribute name="label">
+         <string>RVerify Status</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QPlainTextEdit" name="rverifyOutput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Monospace</family>
+            </font>
            </property>
           </widget>
          </item>

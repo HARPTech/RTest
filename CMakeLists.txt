@@ -21,6 +21,7 @@ find_package(Qt5Widgets)
 find_package(Qt5Quick)
 find_package(Qt5QuickWidgets)
 find_package(Qt5Qml)
+find_package(Qt5Xml)
 find_package(Qt5Network)
 
 add_subdirectory(src)
@@ -33,12 +34,12 @@ qt5_add_resources(RTEST_RSCS_SRCS
 
 add_library(rtest SHARED ${SRCS} ${RTEST_RSCS_SRCS})
 add_library(rtests STATIC ${SRCS})
-target_link_libraries(rtest Qt5::Widgets Qt5::Quick Qt5::QuickWidgets Qt5::Qml)
+target_link_libraries(rtest Qt5::Widgets Qt5::Quick Qt5::QuickWidgets Qt5::Qml Qt5::Xml)
 target_link_libraries(rtest rcomm)
 target_link_libraries(rtest rregistry)
 target_link_libraries(rtest rsupport)
 
-target_link_libraries(rtests Qt5::Widgets Qt5::Quick Qt5::QuickWidgets Qt5::Qml)
+target_link_libraries(rtests Qt5::Widgets Qt5::Quick Qt5::QuickWidgets Qt5::Qml Qt5::Xml)
 target_link_libraries(rtests rcomm)
 target_link_libraries(rtests rregistrys)
 target_link_libraries(rtests rsupports)

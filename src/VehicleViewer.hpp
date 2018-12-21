@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "RegulationKernelWrapper.hpp"
+#include "StdinReader.hpp"
 
 namespace Ui {
 class VehicleViewer;
@@ -30,8 +31,13 @@ class VehicleViewer : public QWidget
   };
 
   public:
-  explicit VehicleViewer(QWidget* parent = 0);
+  explicit VehicleViewer(QWidget* parent = nullptr);
   virtual ~VehicleViewer();
+
+  void readAssignmentLine(QString line);
+  void parseAssignmentToken(QString key, QString value);
+
+  void setPassed(bool passed);
 
   private:
   ::Ui::VehicleViewer* ui;
@@ -51,8 +57,7 @@ class VehicleViewer : public QWidget
   void startBenchmark();
   void updateBenchmarkStats();
 
-  void readAssignmentLine(QString line);
-  void parseAssignmentToken(QString key, QString value);
+  StdinReader m_stdinReader;
 
   private Q_SLOTS:
   // Sliders
@@ -98,7 +103,7 @@ class RoverModel : public QAbstractListModel
   };
 
   RoverModel() {}
-  virtual ~RoverModel() {}
+  virtual ~RoverModel() override {}
 
   virtual QHash<int, QByteArray> roleNames() const override
   {
@@ -157,7 +162,7 @@ class RoverModel : public QAbstractListModel
   int16_t m_wheelSteering[4] = { 128, 128, 128, 128 };
   int16_t m_wheelSpeed[4] = { 0, 0, 0, 0 };
 };
-}
-}
+}// namespace rtest
+}// namespace lrt
 
 #endif

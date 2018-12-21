@@ -13,6 +13,7 @@ VehicleViewer::VehicleViewer(QWidget* parent)
   : QWidget(parent)
   , ui(new Ui::VehicleViewer)
   , m_wrapper(this)
+  , m_stdinReader(*this)
 {
   ui->setupUi(this);
 
@@ -223,6 +224,30 @@ VehicleViewer::parseAssignmentToken(QString key, QString value)
   } else if(key == "_forward_velocity_") {
     ui->speedSlider->setValue(val);
   }
+
+  else if(key == "+rverify_status+") {
+    ui->rverifyOutput->document()->setPlainText(value);
+    ui->tools->setCurrentIndex(3);
+  } else if(key == "+rverify_passed+") {
+    ui->tools->setCurrentIndex(3);
+    if(value == "True") {
+      setPassed(true);
+    } else {
+      setPassed(false);
+    }
+  }
+}
+
+void
+VehicleViewer::setPassed(bool passed)
+{
+  if(passed) {
+    setStyleSheet("QPlainTextEdit#rverifyOutput, QQuickWidget { border: 10px "
+                  "solid green; }");
+  } else {
+    setStyleSheet("QPlainTextEdit#rverifyOutput, QQuickWidget { border: 10px "
+                  "solid red; }");
+  }
 }
 
 void
@@ -285,5 +310,5 @@ VehicleViewer::on_steeringRRSpinner_valueChanged(int steering)
   m_roverModel->setData(
     m_roverModel->index(RR, 0), steering, RoverModel::WheelSteeringRole);
 }
-}
-}
+}// namespace rtest
+}// namespace lrt
