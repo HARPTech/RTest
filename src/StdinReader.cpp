@@ -2,6 +2,9 @@
 #include "VehicleViewer.hpp"
 #include <QTextStream>
 #include <QXmlSimpleReader>
+#include <sys/ioctl.h>
+#include <sys/time.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 namespace lrt {
@@ -60,34 +63,59 @@ StdinReader::characters(const QString& characters)
 void
 StdinReader::activated(int)
 {
-  QTextStream stdinStream(stdin, QIODevice::ReadOnly);
-
   QString xml = "<input>";
 
-  while(!stdinStream.atEnd()) {
-    QString line = stdinStream.readLine();
-    if(line.length() > 0 && line.at(0) == "~") {
-      line.remove(0, 1);
-      // The line is written in quick-set notation.
+  bool foundXML = false;
+  bool running = true;
 
-      // Split strings by "," symbol.
-      if(line.contains(",")) {
-        QStringList lines = line.split(",");
-        for(auto line : lines) {
-          m_vehicleViewer.readAssignmentLine(line);
+  int count = 0;
+
+  while(running) {
+    // Check if reading can continue afterwards. This is a solution for Linux
+    // systems and not yet portable, because it relies heavily on ioctl.
+    ioctl(STDIN_FILENO, FIONREAD, &count);
+    if(count <= 0) {
+      running = false;
+      continue;
+    }
+
+    char buffer[count];
+    ssize_t l = read(STDIN_FILENO, &buffer, count);
+    if(l <= 0) {
+      qDebug() << "Error during reading from stdin.";
+    }
+
+    QString content = QString::fromUtf8(buffer);
+    QStringList lines = content.split("\n");
+
+    for(auto line : lines) {
+      if(line.length() > 0 && line.at(0) == "~") {
+        line.remove(0, 1);
+        // The line is written in quick-set notation.
+
+        // Split strings by "," symbol.
+        if(line.contains(",")) {
+          QStringList lines = line.split(",");
+          for(auto line : lines) {
+            m_vehicleViewer.readAssignmentLine(line);
+          }
         }
+        m_vehicleViewer.readAssignmentLine(line);
+      } else {
+        // Line is in expanded (XML) syntax.
+        if(line != "") {
+          xml.append(line);
+        }
+        xml.append("\n");
+        foundXML = true;
       }
-      m_vehicleViewer.readAssignmentLine(line);
-    } else {
-      // Line is in expanded (XML) syntax.
-      if(line != "") {
-        xml.append(line);
-      }
-      xml.append("\n");
     }
   }
 
   xml.append("</input>");
+
+  if(!foundXML)
+    return;
 
   // Parse XML commands.
   QXmlInputSource source;
