@@ -89,7 +89,7 @@ StdinReader::activated(int)
     QStringList lines = content.split("\n");
 
     for(auto line : lines) {
-      if(line.length() > 0 && line.at(0) == "~") {
+      if(line.length() > 0 && line.at(0) == QChar('~')) {
         line.remove(0, 1);
         // The line is written in quick-set notation.
 

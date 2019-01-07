@@ -2,7 +2,7 @@ FROM dockcross/linux-x64
 
 ENV DEFAULT_DOCKCROSS_IMAGE rtest-amd64
 
-RUN apt-get install -yq libboost-serialization-dev qtdeclarative5-dev qt5-default libsqlite3-dev swig2.0
+RUN apt-get update && apt-get install -yq libboost-serialization-dev libboost-log-dev libboost-regex-dev qtdeclarative5-dev qt5-default libsqlite3-dev swig2.0
 
 # Install Standard Python Dev Stuff
 RUN apt-get install -yq libpython3-dev python3-numpy python3 libpython3.4
