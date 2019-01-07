@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.4)
 project(RTest
-    VERSION 0.7.1)
+    VERSION 0.7.2)
 
 set(BUILD_NUMBER "0" CACHE STRING "Build-Number")
 
@@ -76,6 +76,15 @@ install(FILES
 		DESTINATION share/RTest/
 		)
 
+# This is a workaround for installing required shared objects with RTest. 
+# This does not fit with other packages of the rover codebase, but should not be a problem.
+install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/RBase/RCore/librbp/librbp.so
+        ${CMAKE_CURRENT_BINARY_DIR}/RBase/RCore/librcore/librcore.so
+        ${CMAKE_CURRENT_BINARY_DIR}/RBase/RCore/librcp/librcp.so
+        ${CMAKE_CURRENT_BINARY_DIR}/RBase/RCore/librsp/librsp.so
+		DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
 set(CPACK_GENERATOR "DEB")
 
 set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
@@ -91,6 +100,7 @@ set(CPACK_RESSOURCE_FILE_README ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
 set(CPACK_OUTPUT_FILE_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/packages)
 set(CPACK_PACKAGE_CONTACT "Max Heisinger <mail@maximaximal.com>")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, python3-numpy, qml-module-qtquick-controls, qml-module-qtquick-layouts, qml-module-qtquick2, libqt5widgets5, libqt5gui5, libqt5quick5, libqt5qml5, libqt5quickwidgets5, swig, sqlite3")
+set(CPACK_DEBIAN_PACKAGE_CONFLICTS "rbase")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_CURRENT_SOURCE_DIR}/postinst;${CMAKE_CURRENT_SOURCE_DIR}/prerm")
 
